@@ -6,7 +6,11 @@ def home(request):
     import json
     import requests
 
-    api_request = requests.get("https://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&api_key=02A407DD-7F9F-4D01-ADAD-A582AD35789F&zipCode=02474")
+    with open("env.json") as json_handle:
+        cfg = json.load(json_handle)
+    print(cfg)
+    api_request = requests.get(f"https://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&api_key={cfg["api_key"]}&zipCode=02474")
+    print(api_request)
     try:
         api = json.loads(api_request.content)
     except:

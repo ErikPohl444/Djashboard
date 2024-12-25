@@ -1,3 +1,4 @@
 .idea/
 djangodashboard/lookup/__pycache__/
 .env
+djangodashboard/env.json
