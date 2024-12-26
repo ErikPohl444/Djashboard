@@ -12,7 +12,7 @@
             crossorigin="anonymous"></script>
     <style>
         .good {background-color: #0C0;}
-         .moderate {background-color: #FFFF00;}
+        .moderate {background-color: #FFFF00;}
         .usg {background-color: #FF9900;}
         .unhealthy {background-color: #FF0000;}
         .veryunhealthy {background-color: #990066;}
@@ -34,9 +34,10 @@
                     <a class="nav-link" href="{% url 'about' %}">About Me</a>
                 </li>
             </ul>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-secondary" type="submit">Search</button>
+            <form action="{% url 'home' %}" class="d-flex" role="search" method="POST">
+                {% csrf_token %}
+                <input class="form-control me-2" type="search" placeholder="Enter Zip Code" aria-label="Search" name="zipcode">
+                <button class="btn btn-outline-secondary" type="submit">Lookup</button>
             </form>
         </div>
     </div>

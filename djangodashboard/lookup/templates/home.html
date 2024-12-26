@@ -8,6 +8,9 @@
 <body>
 {% block content %}
 <br/>
+{% if zipcode %}
+zipcode
+{% endif %}
 {% if api %}
 {% if api == "Error..." %}
 There was an error, please try again...
