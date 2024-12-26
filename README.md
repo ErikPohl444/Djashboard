@@ -1,6 +1,7 @@
 # Dashboards
 
 A django app which displays one or more dashboards.
+The starting case is air quality from a training video I watched.
 
 ## Future plans
 

@@ -17,6 +17,7 @@ def home(request):
         print(api_request)
         try:
             api = json.loads(api_request.content)
+            cat_rec = api[0]['Category']['Name']
         except:
             api = "Error..."
 
