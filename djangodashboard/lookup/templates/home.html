@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello world!</title>
+
 </head>
 <body>
 {% block content %}
@@ -13,7 +14,7 @@
             There was an error, please try again...
         {% else %}
             {% if api.0.Category.Name == "Good" %}
-                <div class="bg-success jumbotron-fluid">
+                <div class="jumbotron-fluid good">
             {% elif "Moderate" == "Moderate" %}
                 <div class="bg-info jumbotron-fluid">
             {% elif api.0.Category.Name == "Unhealthy for Sensitive Group" %}
