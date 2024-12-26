@@ -16,7 +16,31 @@ def home(request):
     except:
         api = "Error..."
 
-    return render(request, 'home.html', {'api': api})
+    if api[0]['Category']['Name'] == "Good":
+        category_description = "air quality is good"
+        category_color = 'good'
+    elif api[0]['Category']['Name'] == "Moderate":
+        category_description = "moderate"
+        category_color = '#FFFF00;'
+    elif api[0]['Category']['Name'] == "Unhealthy for Sensitive Group":
+        category_description = "Air quality is unhealthy."
+        category_color = '#FF9900;'
+    elif api[0]['Category']['Name'] == "Very Unhealthy":
+        category_description = "Airquality is very unhealthy."
+        category_color = '#990066;'
+    elif api[0]['Category']['Name'] == "Hazardous":
+        category_description = "Air quality is hazardous."
+        category_color = '#660000;'
+
+
+    return render(
+        request, 'home.html',
+        {
+            'api': api,
+            'category_description': category_description,
+            'category_color': category_color
+        }
+    )
 
 def about(request):
     return render(request, 'about.html', {})

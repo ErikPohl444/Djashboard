@@ -4,45 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello world!</title>
-
 </head>
 <body>
 {% block content %}
-    <br/>
-    {% if api %}
-        {% if api == "Error..." %}
-            There was an error, please try again...
-        {% else %}
-            {% if api.0.Category.Name == "Good" %}
-                <div class="jumbotron-fluid good">
-            {% elif "Moderate" == "Moderate" %}
-                <div class="bg-info jumbotron-fluid">
-            {% elif api.0.Category.Name == "Unhealthy for Sensitive Group" %}
-                <div class="bg-dark jumbotron-fluid">
-            {% elif api.0.Category.Name == "Very Unhealthy" %}
-                <div class="bg-warning jumbotron-fluid">
-            {% elif api.0.Category.Name == "Hazardous" %}
-                <div class="bg-danger jumbotron-fluid">
-            {% endif %}
-                <h1 class="display-4">{{ api.0.Category.Name }}</h1>
-                <p class="lead">Current {{ api.0.ReportingArea }} Air quality: {{ api.0.AQI }}</p>
-                <hr class="my-4">
-                <p class="lead"></p>
-                {% if api.0.Category.Name == "Good" %}
-                    <p> Air quality is good. </p>
-                {% elif api.0.Category.Name == "Moderate" %}
-                    <p> Air quality is moderate. </p>
-                {% elif api.0.Category.Name == "Unhealthy for Sensitive Group" %}
-                    <p> Air quality is unhealthy. </p>
-                {% elif api.0.Category.Name == "Very Unhealthy" %}
-                    <p> Air quality is very unhealthy. </p>
-                {% elif api.0.Category.Name == "Hazardous" %}
-                    <p> Air quality is hazardous. </p>
-                {% endif %}
-            </div>
-            </hr>
-        {% endif %}
-   {% endif %}
+<br/>
+{% if api %}
+{% if api == "Error..." %}
+There was an error, please try again...
+{% else %}
+<div class="jumbotron-fluid {{ category_color }}">
+    <h1 class="display-4">{{ api.0.Category.Name }}</h1>
+    <p class="lead">Current {{ api.0.ReportingArea }} Air quality: {{ api.0.AQI }}</p>
+    <hr class="my-4">
+    <p class="lead"></p>
+    <p>{{ category_description }}</p>
+    </hr>
+</div>
+{% endif %}
+{% endif %}
 {% endblock %}
 
 
