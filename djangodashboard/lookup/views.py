@@ -21,19 +21,19 @@ def home(request):
         except:
             api = "Error..."
 
-        if api[0]['Category']['Name'] == "Good":
+        if cat_rec == "Good":
             category_description = "air quality is good"
             category_color = 'good'
-        elif api[0]['Category']['Name'] == "Moderate":
+        elif cat_rec == "Moderate":
             category_description = "moderate"
             category_color = 'moderate'
-        elif api[0]['Category']['Name'] == "Unhealthy for Sensitive Groups":
+        elif cat_rec == "Unhealthy for Sensitive Groups":
             category_description = "Air quality is unhealthy."
             category_color = 'Unhealthy for Sensitive Groups'
-        elif api[0]['Category']['Name'] == "Very Unhealthy":
+        elif cat_rec == "Very Unhealthy":
             category_description = "Airquality is very unhealthy."
             category_color = 'veryunhealthy'
-        elif api[0]['Category']['Name'] == "Hazardous":
+        elif cat_rec == "Hazardous":
             category_description = "Air quality is hazardous."
             category_color = 'hazardous'
 
