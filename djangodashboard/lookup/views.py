@@ -2,6 +2,8 @@ from django.shortcuts import render
 from . import views
 
 # Create your views here.
+
+
 def home(request):
     import json
     import requests
@@ -12,13 +14,14 @@ def home(request):
         print(cfg)
         zipcode = request.POST['zipcode']
         api_request = requests.get(
-            f"https://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&api_key={cfg["api_key"]}&zipCode={zipcode}"
+            f"https://www.airnowapi.org/aq/observation/zipCode/current/"
+            f"?format=application/json&api_key={cfg["api_key"]}&zipCode={zipcode}"
         )
         print(api_request)
         try:
             api = json.loads(api_request.content)
             cat_rec = api[0]['Category']['Name']
-        except:
+        except KeyError:
             api = "Error..."
 
         translate_cat_to_descr = {
@@ -32,7 +35,6 @@ def home(request):
 
         category_color = cat_rec.lower().replace(" ", "")
         category_description = translate_cat_to_descr[cat_rec]
-
 
         return render(
             request, 'home.html',
@@ -48,11 +50,12 @@ def home(request):
         with open("env.json") as json_handle:
             cfg = json.load(json_handle)
         print(cfg)
-        api_request = requests.get(f"https://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&api_key={cfg["api_key"]}&zipCode=02474")
+        api_request = requests.get(f"https://www.airnowapi.org/aq/observation/zipCode/current/?"
+                                   f"format=application/json&api_key={cfg["api_key"]}&zipCode=02474")
         print(api_request)
         try:
             api = json.loads(api_request.content)
-        except:
+        except KeyError:
             api = "Error..."
 
         if api[0]['Category']['Name'] == "Good":
@@ -71,7 +74,6 @@ def home(request):
             category_description = "Air quality is hazardous."
             category_color = '#660000;'
 
-
         return render(
             request, 'home.html',
             {
@@ -80,6 +82,7 @@ def home(request):
                 'category_color': category_color
             }
         )
+
 
 def about(request):
     return render(request, 'about.html', {})
