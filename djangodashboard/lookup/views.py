@@ -21,21 +21,17 @@ def home(request):
         except:
             api = "Error..."
 
-        if cat_rec == "Good":
-            category_description = "air quality is good"
-            category_color = 'good'
-        elif cat_rec == "Moderate":
-            category_description = "moderate"
-            category_color = 'moderate'
-        elif cat_rec == "Unhealthy for Sensitive Groups":
-            category_description = "Air quality is unhealthy."
-            category_color = 'Unhealthy for Sensitive Groups'
-        elif cat_rec == "Very Unhealthy":
-            category_description = "Airquality is very unhealthy."
-            category_color = 'veryunhealthy'
-        elif cat_rec == "Hazardous":
-            category_description = "Air quality is hazardous."
-            category_color = 'hazardous'
+        translate_cat_to_descr = {
+            "Good": "air quality is good",
+            "Moderate": "getting moderate",
+            "Unhealthy for Sensitive Groups": "be careful out there if you are in a sensitive group",
+            "Very Unhealthy": "everyone stay inside for now",
+            "Hazardous": "Air quality is hazardous."
+
+        }
+
+        category_color = cat_rec.lower().replace(" ", "")
+        category_description = translate_cat_to_descr[cat_rec]
 
 
         return render(
