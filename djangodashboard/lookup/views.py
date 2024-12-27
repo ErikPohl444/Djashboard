@@ -10,7 +10,7 @@ def home(request):
 
     with open("env.json") as json_handle:
         cfg = json.load(json_handle)
-
+    api_key = cfg["api_key"]
     if request.method == "POST":
         zipcode = request.POST['zipcode']
     else:
