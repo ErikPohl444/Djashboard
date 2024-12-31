@@ -8,6 +8,7 @@ import requests
 
 def home(request):
 
+    # see env_template.json for a template of a functioning env.json file
     with open("env.json") as json_handle:
         cfg = json.load(json_handle)
     api_key = cfg["api_key"]
