@@ -8,21 +8,40 @@ import requests
 
 
 def home(request):
+    # get config data
     # see env_template.json for a template of a functioning env.json file
+
+    api_calls = []
     with open("env.json") as json_handle:
         cfg = json.load(json_handle)
     api_key = cfg["api_key"]
+    with open("env2.json") as json_handle:
+        cfg2 = json.load(json_handle)
+        cfg2 = cfg2["api_data"]
+        for api_info in cfg2:
+            api_call = api_info["api_call"]
+            args = api_info["args"]
+            for arg_no, arg in enumerate(args):
+                token = "{"+str(arg_no)+"}"
+                api_call = api_call.replace(token, args[arg])
+            api_calls.append(api_call)
+
+    # extract
     if request.method == "POST":
         zipcode = request.POST['zipcode']
     else:
         zipcode = cfg["initial_zip"]
-    zipcode_list = [zipcode, '10001', '94016', '88901', '90210', '60610']
+        # right now do nothing with zipcode
+
+    # extract and transform
     dashboard_vals = []
-    for zipcode in zipcode_list:
+    for api_call in api_calls:
+        # extract
         api_request = requests.get(
-            f"https://www.airnowapi.org/aq/observation/zipCode/current/"
-            f"?format=application/json&api_key={api_key}&zipCode={zipcode}"
+            api_call
         )
+
+        # transform
         try:
             api = json.loads(api_request.content)
             cat_rec = api[0]['Category']['Name']
@@ -35,25 +54,21 @@ def home(request):
             "Unhealthy for Sensitive Groups": "be careful out there if you are in a sensitive group",
             "Very Unhealthy": "everyone stay inside for now",
             "Hazardous": "Air quality is hazardous."
-
         }
-
         category_color = cat_rec.lower().replace(" ", "")
         category_description = translate_cat_to_descr[cat_rec]
         category_subtext = f"Current {api[0]['ReportingArea']} Air quality: {api[0]['AQI']}"
         category_name = cat_rec
         api_status = api
-
         dashboard_val = {
             'category_color': category_color,
             'category_description': category_description,
             'category_subtext': category_subtext,
             'category_name': category_name
         }
-
         dashboard_vals.append(dashboard_val)
-    print(dashboard_vals)
 
+    # display
     return render(
         request, 'home.html',
         {
