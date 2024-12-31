@@ -11,13 +11,13 @@
 {% if zipcode %}
 zipcode
 {% endif %}
-{% if api %}
-{% if api == "Error..." %}
+{% if api_status %}
+{% if api_status == "Error..." %}
 There was an error, please try again...
 {% else %}
 <div class="jumbotron-fluid {{ category_color }}">
-    <h1 class="display-4">{{ api.0.Category.Name }}</h1>
-    <p class="lead">Current {{ api.0.ReportingArea }} Air quality: {{ api.0.AQI }}</p>
+    <h1 class="display-4">{{ category_name }}</h1>
+    <p class="lead">{{ category_subtext }}</p>
     <hr class="my-4">
     <p class="lead"></p>
     <p>{{ category_description }}</p>

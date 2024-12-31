@@ -37,13 +37,18 @@ def home(request):
 
     category_color = cat_rec.lower().replace(" ", "")
     category_description = translate_cat_to_descr[cat_rec]
+    category_subtext = f"Current {api[0]['ReportingArea']} Air quality: {api[0]['AQI']}"
+    category_name = cat_rec
+    api_status = api
 
     return render(
         request, 'home.html',
         {
-            'api': api,
+            'api_status': api_status,
             'category_description': category_description,
-            'category_color': category_color
+            'category_subtext': category_subtext,
+            'category_color': category_color,
+            'category_name': category_name
         }
     )
 
