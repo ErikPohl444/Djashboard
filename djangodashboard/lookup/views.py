@@ -16,39 +16,42 @@ def home(request):
         zipcode = request.POST['zipcode']
     else:
         zipcode = cfg["initial_zip"]
-    api_request = requests.get(
-        f"https://www.airnowapi.org/aq/observation/zipCode/current/"
-        f"?format=application/json&api_key={api_key}&zipCode={zipcode}"
-    )
-    try:
-        api = json.loads(api_request.content)
-        cat_rec = api[0]['Category']['Name']
-    except KeyError:
-        api = "Error..."
+    zipcode_list = [zipcode, '10001', '94016', '88901', '90210', '60610']
+    dashboard_vals = []
+    for zipcode in zipcode_list:
+        api_request = requests.get(
+            f"https://www.airnowapi.org/aq/observation/zipCode/current/"
+            f"?format=application/json&api_key={api_key}&zipCode={zipcode}"
+        )
+        try:
+            api = json.loads(api_request.content)
+            cat_rec = api[0]['Category']['Name']
+        except KeyError:
+            api = "Error..."
 
-    translate_cat_to_descr = {
-        "Good": "air quality is good",
-        "Moderate": "getting moderate",
-        "Unhealthy for Sensitive Groups": "be careful out there if you are in a sensitive group",
-        "Very Unhealthy": "everyone stay inside for now",
-        "Hazardous": "Air quality is hazardous."
+        translate_cat_to_descr = {
+            "Good": "air quality is good",
+            "Moderate": "getting moderate",
+            "Unhealthy for Sensitive Groups": "be careful out there if you are in a sensitive group",
+            "Very Unhealthy": "everyone stay inside for now",
+            "Hazardous": "Air quality is hazardous."
 
-    }
+        }
 
-    category_color = cat_rec.lower().replace(" ", "")
-    category_description = translate_cat_to_descr[cat_rec]
-    category_subtext = f"Current {api[0]['ReportingArea']} Air quality: {api[0]['AQI']}"
-    category_name = cat_rec
-    api_status = api
+        category_color = cat_rec.lower().replace(" ", "")
+        category_description = translate_cat_to_descr[cat_rec]
+        category_subtext = f"Current {api[0]['ReportingArea']} Air quality: {api[0]['AQI']}"
+        category_name = cat_rec
+        api_status = api
 
-    dashboard_val = {
-        'category_color': category_color,
-        'category_description': category_description,
-        'category_subtext': category_subtext,
-        'category_name': category_name
-    }
+        dashboard_val = {
+            'category_color': category_color,
+            'category_description': category_description,
+            'category_subtext': category_subtext,
+            'category_name': category_name
+        }
 
-    dashboard_vals = [dashboard_val for _ in range(10)]
+        dashboard_vals.append(dashboard_val)
     print(dashboard_vals)
 
     return render(
