@@ -3,11 +3,11 @@ from . import views
 import json
 import requests
 
+
 # Create your views here.
 
 
 def home(request):
-
     # see env_template.json for a template of a functioning env.json file
     with open("env.json") as json_handle:
         cfg = json.load(json_handle)
@@ -48,9 +48,8 @@ def home(request):
         'category_name': category_name
     }
 
-    dashboard_vals = [dashboard_val for x in range(10)]
+    dashboard_vals = [dashboard_val for _ in range(10)]
     print(dashboard_vals)
-
 
     return render(
         request, 'home.html',

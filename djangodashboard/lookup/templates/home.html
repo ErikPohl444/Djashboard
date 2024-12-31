@@ -15,16 +15,16 @@ zipcode
 {% if api_status == "Error..." %}
 There was an error, please try again...
 {% else %}
-    {% for item in dashboard_vals %}
-    <div class="jumbotron-fluid {{ item.category_color }}">
-        <h1 class="display-4">{{ item.category_name }}</h1>
-        <p class="lead">{{ item.category_subtext }}</p>
-        <hr class="my-4">
-        <p class="lead"></p>
-        <p>{{ item.category_description }}</p>
-        </hr>
-    </div>
-    {% endfor %}
+{% for item in dashboard_vals %}
+<div class="jumbotron-fluid {{ item.category_color }}">
+    <h1 class="display-4">{{ item.category_name }}</h1>
+    <p class="lead">{{ item.category_subtext }}</p>
+    <hr class="my-4">
+    <p class="lead"></p>
+    <p>{{ item.category_description }}</p>
+    </hr>
+</div>
+{% endfor %}
 {% endif %}
 {% endif %}
 {% endblock %}
