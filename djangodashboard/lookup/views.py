@@ -41,6 +41,17 @@ def home(request):
     category_name = cat_rec
     api_status = api
 
+    dashboard_val = {
+        'category_color': category_color,
+        'category_description': category_description,
+        'category_subtext': category_subtext,
+        'category_name': category_name
+    }
+
+    dashboard_vals = [dashboard_val for x in range(10)]
+    print(dashboard_vals)
+
+
     return render(
         request, 'home.html',
         {
@@ -48,7 +59,8 @@ def home(request):
             'category_description': category_description,
             'category_subtext': category_subtext,
             'category_color': category_color,
-            'category_name': category_name
+            'category_name': category_name,
+            'dashboard_vals': dashboard_vals
         }
     )
 
