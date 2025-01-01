@@ -49,8 +49,6 @@ def home(request):
             api = json.loads(api_request.content)
             fun = lambda jresult: eval(api_transformations[api_no]["cat_rec"])
             cat_rec = fun(api)
-
-            # cat_rec = api[0]['Category']['Name']
         except KeyError:
             api = "Error..."
 
