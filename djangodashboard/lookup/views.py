@@ -12,6 +12,7 @@ def home(request):
     # see env_template.json for a template of a functioning env.json file
 
     api_calls = []
+    api_transformations = []
     with open("env.json") as json_handle:
         cfg = json.load(json_handle)
     api_key = cfg["api_key"]
@@ -24,7 +25,9 @@ def home(request):
             for arg_no, arg in enumerate(args):
                 token = "{"+str(arg_no)+"}"
                 api_call = api_call.replace(token, args[arg])
+            transform = api_info["transform"]
             api_calls.append(api_call)
+            api_transformations.append(transform)
 
     # extract
     if request.method == "POST":
@@ -35,7 +38,7 @@ def home(request):
 
     # extract and transform
     dashboard_vals = []
-    for api_call in api_calls:
+    for api_no, api_call in enumerate(api_calls):
         # extract
         api_request = requests.get(
             api_call
@@ -44,7 +47,10 @@ def home(request):
         # transform
         try:
             api = json.loads(api_request.content)
-            cat_rec = api[0]['Category']['Name']
+            fun = lambda jresult: eval(api_transformations[api_no]["cat_rec"])
+            cat_rec = fun(api)
+
+            # cat_rec = api[0]['Category']['Name']
         except KeyError:
             api = "Error..."
 
