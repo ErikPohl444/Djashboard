@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-{% extends 'base.html' %}
-<head>
-    <meta charset="UTF-8">
-    {% block title %}Djashboard-- About Me{% endblock %}
-</head>
-<body>
-{% block content %}
+    {% extends 'base.html' %}
+    <head>
+        <meta charset="UTF-8">
+        {% block title %}Djashboard-- About Me{% endblock %}
+    </head>
+    <body>
+        {% block content %}
 
-<h1>About Me...</h1>
+            <h1>About Me...</h1>
 
-Djashboard allows you to define api calls and select some key values in a json config file.
-Once you do that, and after you map a category value to a color and after you map the category to a description,
-you will have added a related widget -- a Bootstrap jumbotron -- to the dashboard reflecting that API call.
-You can configure as many widgets as you'd like for any given dashboard.
+            Djashboard allows you to define api calls and select some key values in a json config file.
+            Once you do that, and after you map a category value to a color and after you map the category to a description,
+            you will have added a related widget -- a Bootstrap jumbotron -- to the dashboard reflecting that API call.
+            You can configure as many widgets as you'd like for any given dashboard.
 
-{% endblock %}
+        {% endblock %}
 
-</body>
+    </body>
 </html>

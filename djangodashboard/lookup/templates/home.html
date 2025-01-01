@@ -1,34 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-{% extends 'base.html' %}
-<head>
-    <meta charset="UTF-8">
-    {% block title %}Djashboard-- Dashboard: Widgets{% endblock %}
-</head>
-<body>
-{% block content %}
-<br/>
-{% if zipcode %}
-zipcode
-{% endif %}
-{% if api_status %}
-{% if api_status == "Error..." %}
-There was an error, please try again...
-{% else %}
-{% for item in dashboard_vals %}
-<div class="jumbotron-fluid {{ item.category_color }}">
-    <h1 class="display-4">{{ item.category_name }}</h1>
-    <p class="lead">{{ item.category_subtext }}</p>
-    <hr class="my-4">
-    <p class="lead"></p>
-    <p>{{ item.category_description }}</p>
-    </hr>
-</div>
-{% endfor %}
-{% endif %}
-{% endif %}
-{% endblock %}
-
-
-</body>
+    {% extends 'base.html' %}
+    <head>
+        <meta charset="UTF-8">
+        {% block title %}Djashboard-- Dashboard: Widgets{% endblock %}
+    </head>
+    <body>
+        {% block content %}
+            <br/>
+            {% if zipcode %}
+                zipcode
+            {% endif %}
+            {% if api_status %}
+                {% if api_status == "Error..." %}
+                    There was an error, please try again...
+                {% else %}
+                    {% for item in dashboard_vals %}
+                        <div class="jumbotron-fluid {{ item.category_color }}">
+                            <h1 class="display-4">{{ item.category_name }}</h1>
+                            <p class="lead">{{ item.category_subtext }}</p>
+                            <hr class="my-4">
+                            <p class="lead"></p>
+                            <p>{{ item.category_description }}</p>
+                            </hr>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+    </body>
 </html>
