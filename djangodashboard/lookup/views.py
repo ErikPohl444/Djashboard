@@ -4,9 +4,6 @@ import json
 import requests
 
 
-# Create your views here.
-
-
 def home(request):
     # get config data
     # see env_template.json for a template of a functioning env.json file
