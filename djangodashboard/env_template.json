@@ -1,4 +1,30 @@
 {
-  "api_key": "your api key for airnow",
-  "initial_zip": "your initial zip code"
+  "api_data": [
+    {
+      "api_call": "https://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&api_key={0}&zipCode={1}",
+      "args": {
+        "api_key": "[your api key]",
+        "initial_zip": "02474"
+      },
+      "transform": {
+        "cat_rec": "jresult[0]['Category']['Name']",
+        "cat_subtext": "f\"Current {jresult[0]['ReportingArea']} Air quality: {jresult[0]['AQI']}\"",
+        "color_translate": {
+          "Good": "green",
+          "Moderate": "yellow",
+          "USG": "violet",
+          "Unhealthy": "burgundy",
+          "Very Unhealthy": "brightred",
+          "Hazardous": "darkred"
+        },
+        "descr_translate": {
+          "Good": "air quality is good",
+          "Moderate": "getting moderate",
+          "Unhealthy for Sensitive Groups": "be careful out there if you are in a sensitive group",
+          "Very Unhealthy": "everyone stay inside for now",
+          "Hazardous": "Air quality is hazardous."
+        }
+      }
+    }
+  ]
 }
