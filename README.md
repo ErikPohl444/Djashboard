@@ -1,7 +1,8 @@
-# Dashboards
+# Djashboard
 
-A django app which displays one or more dashboards.
-The starting case is air quality from a training video I watched.
+Django web app to display as many jumbotron alert widgets on the same dashboard as you define in a json config file.
+The starting case is air quality from a training video I watched, but I abstracted it to an engine.
+Code is almost unrecognizable from its starting place, but I am using the same API call in my business logic json config script for the dashboard widgets.
 
 ## Future plans
 

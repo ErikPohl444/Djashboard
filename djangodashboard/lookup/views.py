@@ -32,7 +32,7 @@ def home(request):
     else:
         zipcode = None
     # make a filter here
-    
+
     # extract and transform
     dashboard_vals = []
     for api_no, api_call in enumerate(api_calls):
