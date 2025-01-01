@@ -20,7 +20,7 @@ def home(request):
             api_call = api_info["api_call"]
             args = api_info["args"]
             for arg_no, arg in enumerate(args):
-                token = "{"+str(arg_no)+"}"
+                token = "{" + str(arg_no) + "}"
                 api_call = api_call.replace(token, args[arg])
             transform = api_info["transform"]
             api_calls.append(api_call)
