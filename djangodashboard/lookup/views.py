@@ -4,6 +4,10 @@ import json
 import requests
 
 
+def do_transform_logic(result_json, transform_logic):
+    fun = lambda jresult: eval(transform_logic)
+    return fun(result_json)
+
 def home(request):
     # get config data
     # see env_template.json for a template of a functioning env.json file
@@ -11,15 +15,15 @@ def home(request):
     api_calls = []
     api_transformations = []
     with open("env2.json") as json_handle:
-        cfg2 = json.load(json_handle)
-        cfg2 = cfg2["api_data"]
-        for api_info in cfg2:
-            api_call = api_info["api_call"]
-            args = api_info["args"]
-            for arg_no, arg in enumerate(args):
+        api_calls_widget_config = json.load(json_handle)
+        api_calls_widget_config = api_calls_widget_config["api_data"]
+        for widget_info in api_calls_widget_config:
+            api_call = widget_info["api_call"]
+            api_call_args = widget_info["args"]
+            for arg_no, arg in enumerate(api_call_args):
                 token = "{" + str(arg_no) + "}"
-                api_call = api_call.replace(token, args[arg])
-            transform = api_info["transform"]
+                api_call = api_call.replace(token, api_call_args[arg])
+            transform = widget_info["transform"]
             api_calls.append(api_call)
             api_transformations.append(transform)
 
@@ -40,19 +44,23 @@ def home(request):
 
         # transform
         try:
-            api = json.loads(api_request.content)
-            fun = lambda jresult: eval(api_transformations[api_no]["cat_rec"])
-            cat_rec = fun(api)
+            api_result = json.loads(api_request.content)
+            cat_rec = do_transform_logic(
+                api_result,
+                api_transformations[api_no]["cat_rec"]
+            )
         except KeyError:
-            api = "Error..."
+            api_result = "Error..."
         category_name = cat_rec
-        fun = lambda jresult: eval(api_transformations[api_no]["cat_subtext"])
-        category_subtext = fun(api)
+        category_subtext = do_transform_logic(
+            api_result,
+            api_transformations[api_no]["cat_subtext"]
+        )
         cat_color_matrix = api_transformations[api_no]["color_translate"]
         category_color = cat_color_matrix[cat_rec]
         cat_descr_matrix = api_transformations[api_no]["descr_translate"]
         category_description = cat_descr_matrix[cat_rec]
-        api_status = api
+        api_status = api_result
         # we have our 4 values for each widget
         dashboard_val = {
             'category_color': category_color,
