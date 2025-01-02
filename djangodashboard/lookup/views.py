@@ -8,13 +8,10 @@ def do_transform_logic(result_json, transform_logic):
     fun = lambda jresult: eval(transform_logic)
     return fun(result_json)
 
-def home(request):
-    # get config data
-    # see env_template.json for a template of a functioning env.json file
-
+def get_api_metadata(env_file_name):
     api_calls = []
     api_transformations = []
-    with open("env2.json") as json_handle:
+    with open(env_file_name) as json_handle:
         api_calls_widget_config = json.load(json_handle)
         api_calls_widget_config = api_calls_widget_config["api_data"]
         for widget_info in api_calls_widget_config:
@@ -26,6 +23,12 @@ def home(request):
             transform = widget_info["transform"]
             api_calls.append(api_call)
             api_transformations.append(transform)
+    return api_calls, api_transformations
+
+def home(request):
+    # get config data
+    # see env_template.json for a template of a functioning env.json file
+    api_calls, api_transformations = get_api_metadata("env2.json")
 
     # extract
     if request.method == "POST":
@@ -45,24 +48,25 @@ def home(request):
         # transform
         try:
             api_result = json.loads(api_request.content)
-            cat_rec = do_transform_logic(
+            category_name = do_transform_logic(
                 api_result,
                 api_transformations[api_no]["cat_rec"]
             )
         except KeyError:
             api_result = "Error..."
-        category_name = cat_rec
         category_subtext = do_transform_logic(
             api_result,
             api_transformations[api_no]["cat_subtext"]
         )
         cat_color_matrix = api_transformations[api_no]["color_translate"]
-        category_color = cat_color_matrix[cat_rec]
+        category_color = cat_color_matrix[category_name]
         cat_descr_matrix = api_transformations[api_no]["descr_translate"]
-        category_description = cat_descr_matrix[cat_rec]
+        category_description = cat_descr_matrix[category_name]
         api_status = api_result
-        # we have our 4 values for each widget
+
+        # we have our 5 values for each widget
         dashboard_val = {
+            'api_status': api_status,
             'category_color': category_color,
             'category_description': category_description,
             'category_subtext': category_subtext,
