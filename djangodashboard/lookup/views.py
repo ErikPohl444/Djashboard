@@ -41,32 +41,31 @@ def home(request):
     dashboard_vals = []
     for api_no, api_call in enumerate(api_calls):
         # extract
-        api_request = requests.get(
-            api_call
-        )
+        api_result = requests.get(api_call)
 
-        # transform
+        # perform transform logic
         try:
-            api_result = json.loads(api_request.content)
+            api_result_json = json.loads(api_result.content)
             category_name = do_transform_logic(
-                api_result,
+                api_result_json,
                 api_transformations[api_no]["cat_rec"]
             )
         except KeyError:
-            api_result = "Error..."
+            api_result_json = "Error..."
         category_subtext = do_transform_logic(
-            api_result,
+            api_result_json,
             api_transformations[api_no]["cat_subtext"]
         )
+
+        # get transformation dicts/matrices
         cat_color_matrix = api_transformations[api_no]["color_translate"]
-        category_color = cat_color_matrix[category_name]
         cat_descr_matrix = api_transformations[api_no]["descr_translate"]
+        category_color = cat_color_matrix[category_name]
         category_description = cat_descr_matrix[category_name]
-        api_status = api_result
 
         # we have our 5 values for each widget
         dashboard_val = {
-            'api_status': api_status,
+            'api_status': api_result_json,
             'category_color': category_color,
             'category_description': category_description,
             'category_subtext': category_subtext,
@@ -78,7 +77,7 @@ def home(request):
     return render(
         request, 'home.html',
         {
-            'api_status': api_status,
+            'api_status': api_result_json,
             'category_description': category_description,
             'category_subtext': category_subtext,
             'category_color': category_color,
