@@ -72,10 +72,8 @@ def home(request):
         )
 
         # get transformation dicts/matrices
-        cat_color_matrix = api_transformations[api_no]["color_translate"]
-        cat_descr_matrix = api_transformations[api_no]["descr_translate"]
-        category_color = cat_color_matrix[category_name]
-        category_description = cat_descr_matrix[category_name]
+        category_color = api_transformations[api_no]["color_translate"][category_name]
+        category_description = api_transformations[api_no]["descr_translate"][category_name]
 
         # we have our 5 values for each widget
         dashboard_val = {
