@@ -18,7 +18,7 @@ def get_api_metadata(env_file_name):
             api_call = widget_info["api_call"]
             api_call_args = widget_info["args"]
             for arg_no, arg in enumerate(api_call_args):
-                token = "{" + str(arg_no) + "}"
+                token = "{" + str(arg) + "}"
                 api_call = api_call.replace(token, api_call_args[arg])
             transform = widget_info["transform"]
             api_calls.append(api_call)
