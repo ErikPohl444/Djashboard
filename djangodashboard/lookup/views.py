@@ -41,11 +41,21 @@ def home(request):
     for api_no, api_call in enumerate(api_calls):
         # extract
         api_result = requests.get(api_call)
-        print(f"STATUS CODE: {api_result.status_code} {api_result.content}")
         if api_result.status_code != 200:
-            print(f"Received a {api_result.status_code} instead of successful result, so ending process")
+            print(f"Received a {api_result.status_code} instead of successful result")
             print(api_result.content.decode())
-            return HttpResponse(api_result.content.decode())
+            dashboard_val = {
+                'api_status': 'Exception',
+                'category_color': 'darkred',
+                'category_description': api_result.content,
+                'category_subtext': 'API Error',
+                'category_name': 'API Error'
+            }
+            dashboard_vals.append(dashboard_val)
+            api_result_json = 'Exception'
+            continue
+            # return HttpResponse(api_result.content.decode())
+
         # perform transform logic
         try:
             api_result_json = json.loads(api_result.content)
@@ -82,10 +92,6 @@ def home(request):
         request, 'home.html',
         {
             'api_status': api_result_json,
-            'category_description': category_description,
-            'category_subtext': category_subtext,
-            'category_color': category_color,
-            'category_name': category_name,
             'dashboard_vals': dashboard_vals
         }
     )
