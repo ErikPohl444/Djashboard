@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from . import views
 import json
 import requests
@@ -36,13 +36,16 @@ def home(request):
     else:
         zipcode = None
     # make a filter here
-
     # extract and transform
     dashboard_vals = []
     for api_no, api_call in enumerate(api_calls):
         # extract
         api_result = requests.get(api_call)
-
+        print(f"STATUS CODE: {api_result.status_code} {api_result.content}")
+        if api_result.status_code != 200:
+            print(f"Received a {api_result.status_code} instead of successful result, so ending process")
+            print(api_result.content.decode())
+            return HttpResponse(api_result.content.decode())
         # perform transform logic
         try:
             api_result_json = json.loads(api_result.content)
@@ -52,6 +55,7 @@ def home(request):
             )
         except KeyError:
             api_result_json = "Error..."
+            exit(0)
         category_subtext = do_transform_logic(
             api_result_json,
             api_transformations[api_no]["cat_subtext"]
