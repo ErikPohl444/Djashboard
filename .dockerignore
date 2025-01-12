@@ -1,0 +1,7 @@
+# .env/
+.idea/
+djangodashboard/lookup/__pycache__/
+djangodashboard/env.json
+djangodashboard/lookup/__pycache__/views.cpython-312.pyc
+*__pycache__*
+djangodashboard/env2.json

@@ -8,6 +8,7 @@ def do_transform_logic(result_json, transform_logic):
     fun = lambda jresult: eval(transform_logic)
     return fun(result_json)
 
+
 def get_api_metadata(env_file_name):
     api_calls = []
     api_transformations = []
@@ -24,6 +25,7 @@ def get_api_metadata(env_file_name):
             api_calls.append(api_call)
             api_transformations.append(transform)
     return api_calls, api_transformations
+
 
 def home(request):
     # get config data
