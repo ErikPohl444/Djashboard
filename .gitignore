@@ -3,5 +3,6 @@ djangodashboard/lookup/__pycache__/
 .env
 djangodashboard/env.json
 djangodashboard/env2.json
+djangodashboard/env3_test.json
 djangodashboard/__pycache__/
 djangodashboard/djangodashboard/__pycache__/
