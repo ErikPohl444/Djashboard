@@ -2,6 +2,6 @@
 djangodashboard/lookup/__pycache__/
 .env
 djangodashboard/env.json
-djangodashboard/lookup/__pycache__/views.cpython-312.pyc
-*__pycache__*
 djangodashboard/env2.json
+djangodashboard/__pycache__/
+djangodashboard/djangodashboard/__pycache__/

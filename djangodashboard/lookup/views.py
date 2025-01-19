@@ -56,26 +56,39 @@ def home(request):
             dashboard_vals.append(dashboard_val)
             api_result_json = 'Exception'
             continue
-            # return HttpResponse(api_result.content.decode())
+
+        # var assignments
+        primary_keys = ['cat_rec', 'cat_subtext', 'color_translate', 'descr_translate']
+        missing_keys = []
+        for pk in primary_keys:
+            if pk not in api_transformations[api_no].keys():
+                missing_keys.append(pk)
+        if missing_keys:
+            raise KeyError
+        else:
+            cat_rec_xf = api_transformations[api_no]["cat_rec"]
+            cat_subtext_xf = api_transformations[api_no]["cat_subtext"]
+            cat_color_xf = api_transformations[api_no]["color_translate"]
+            descr_xf = api_transformations[api_no]["descr_translate"]
 
         # perform transform logic
         try:
             api_result_json = json.loads(api_result.content)
             category_name = do_transform_logic(
                 api_result_json,
-                api_transformations[api_no]["cat_rec"]
+                cat_rec_xf
             )
         except KeyError:
             api_result_json = "Error..."
             exit(0)
         category_subtext = do_transform_logic(
             api_result_json,
-            api_transformations[api_no]["cat_subtext"]
+            cat_subtext_xf
         )
 
         # get transformation dicts/matrices
-        category_color = api_transformations[api_no]["color_translate"][category_name]
-        category_description = api_transformations[api_no]["descr_translate"][category_name]
+        category_color = cat_color_xf[category_name]
+        category_description = descr_xf[category_name]
 
         # we have our 5 values for each widget
         dashboard_val = {
