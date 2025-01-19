@@ -72,15 +72,11 @@ def home(request):
             descr_xf = api_transformations[api_no]["descr_translate"]
 
         # perform transform logic
-        try:
-            api_result_json = json.loads(api_result.content)
-            category_name = do_transform_logic(
-                api_result_json,
-                cat_rec_xf
-            )
-        except KeyError:
-            api_result_json = "Error..."
-            exit(0)
+        api_result_json = json.loads(api_result.content)
+        category_name = do_transform_logic(
+            api_result_json,
+            cat_rec_xf
+        )
         category_subtext = do_transform_logic(
             api_result_json,
             cat_subtext_xf
