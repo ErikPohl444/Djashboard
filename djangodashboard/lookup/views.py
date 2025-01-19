@@ -1,5 +1,4 @@
-from django.shortcuts import render, HttpResponse
-from . import views
+from django.shortcuts import render
 import json
 import requests
 
@@ -58,18 +57,10 @@ def home(request):
             continue
 
         # var assignments
-        primary_keys = ['cat_rec', 'cat_subtext', 'color_translate', 'descr_translate']
-        missing_keys = []
-        for pk in primary_keys:
-            if pk not in api_transformations[api_no].keys():
-                missing_keys.append(pk)
-        if missing_keys:
-            raise KeyError(f"Missing keys {','.join(missing_keys)}")
-        else:
-            cat_rec_xf = api_transformations[api_no]["cat_rec"]
-            cat_subtext_xf = api_transformations[api_no]["cat_subtext"]
-            cat_color_xf = api_transformations[api_no]["color_translate"]
-            descr_xf = api_transformations[api_no]["descr_translate"]
+        cat_rec_xf = api_transformations[api_no]["cat_rec"]
+        cat_subtext_xf = api_transformations[api_no]["cat_subtext"]
+        color_xf = api_transformations[api_no]["color"]
+        descr_xf = api_transformations[api_no]["descr"]
 
         # perform transformations using evaluations
         api_result_json = json.loads(api_result.content)
@@ -83,7 +74,7 @@ def home(request):
         )
 
         # perform transformations using matrices
-        category_color = cat_color_xf[category_name]
+        category_color = color_xf[category_name]
         category_description = descr_xf[category_name]
 
         # we have our 5 values for each widget
