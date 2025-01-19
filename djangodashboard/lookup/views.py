@@ -64,14 +64,14 @@ def home(request):
             if pk not in api_transformations[api_no].keys():
                 missing_keys.append(pk)
         if missing_keys:
-            raise KeyError
+            raise KeyError(f"Missing keys {','.join(missing_keys)}")
         else:
             cat_rec_xf = api_transformations[api_no]["cat_rec"]
             cat_subtext_xf = api_transformations[api_no]["cat_subtext"]
             cat_color_xf = api_transformations[api_no]["color_translate"]
             descr_xf = api_transformations[api_no]["descr_translate"]
 
-        # perform transform logic
+        # perform transformations using evaluations
         api_result_json = json.loads(api_result.content)
         category_name = do_transform_logic(
             api_result_json,
@@ -82,7 +82,7 @@ def home(request):
             cat_subtext_xf
         )
 
-        # get transformation dicts/matrices
+        # perform transformations using matrices
         category_color = cat_color_xf[category_name]
         category_description = descr_xf[category_name]
 
