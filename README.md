@@ -6,12 +6,11 @@ Code is almost unrecognizable from its starting place, but I am using the same A
 
 ## Future plans
 
-- [ ] 
+- [ ] See issues.
 
 ## Important disclaimer
 
-If any
-
+TBD
 
 ## Getting Started
 
