@@ -2,6 +2,8 @@
 
 Django web app to display as many jumbotron alert widgets on the same dashboard as you define in a JSON config file.
 
+![Blade Runner Jumbotron](20120427125043blade-runner-470x251.webp)
+
 ## Table of Contents
 - [Future Plans](#future-plans)
 - [Disclaimer](#disclaimer)
