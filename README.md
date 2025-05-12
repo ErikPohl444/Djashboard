@@ -1,47 +1,82 @@
 # Djashboard
 
-Django web app to display as many jumbotron alert widgets on the same dashboard as you define in a json config file.
-The starting case is air quality from a training video I watched, but I abstracted it to an engine.
-Code is almost unrecognizable from its starting place, but I am using the same API call in my business logic json config script for the dashboard widgets.
+Django web app to display as many jumbotron alert widgets on the same dashboard as you define in a JSON config file.
 
-## Future plans
+## Table of Contents
+- [Future Plans](#future-plans)
+- [Disclaimer](#disclaimer)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installing](#installing)
+  - [Running the Project](#running-the-project)
+- [Running the Tests](#running-the-tests)
+- [Contributing](#contributing)
+- [Authors](#authors)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
-- [ ] See issues.
+## Future Plans
+- [ ] Implement user authentication to allow personalized dashboards.
+- [ ] Add detailed documentation for advanced JSON configuration options.
 
-## Important disclaimer
-
-TBD
+## Disclaimer
+This project is under active development. Details and functionality might change as it evolves.
 
 ## Getting Started
 
-Instructions
+Follow these instructions to set up and run the project on your local machine.
 
-## Prerequisites
+### Prerequisites
+- Python 3.x installed on your system.
+- Django framework installed (can be installed via the `requirements.txt` file).
+- Docker (optional, for containerized deployment).
 
-I'll provide prereqs here.
+### Installing
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ErikPohl444/Djashboard.git
+   cd Djashboard
+   ```
+2. Set up a virtual environment (optional but recommended):
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # For Linux/macOS
+   venv\Scripts\activate     # For Windows
+   ```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## Installing
+### Running the Project
 
-I will provide installation steps here.
+1. Start the Django development server:
+   ```bash
+   python manage.py runserver
+   ```
 
-## Running the tests
+2. Open your browser and navigate to:
+   ```
+   http://127.0.0.1:8000
+   ```
 
-I will explain how to test the system here using the automated tests.
+## Running the Tests
+Run the automated tests to ensure everything is functioning as expected:
+```bash
+python manage.py test
+```
 
 ## Contributing
-
-For now, I'd be excited to receive pull requests.  I don't have rules for contributing right now.
+I’m excited to receive pull requests! For now, there are no strict contribution guidelines. Feel free to fork the repo, make your changes, and submit a pull request.
 
 ## Authors
+- **Erik Pohl** - *Initial work*
 
-* **Erik Pohl** - *Initial work* - 
-
-Also see the list of github contributors.
+See the list of [contributors](https://github.com/ErikPohl444/Djashboard/graphs/contributors) who have participated in this project.
 
 ## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
 
 ## Acknowledgments
-
-* Thanks to everyone who has motivated me to learn more.
+- Thanks to everyone who has motivated me to learn more.
+- Special thanks to the Django community for their excellent documentation and support.
