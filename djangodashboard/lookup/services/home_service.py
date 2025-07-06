@@ -33,71 +33,83 @@ def get_api_metadata(env_file_name) -> (list[str], list[json]):
     return api_calls, api_transformations
 
 
+def create_exception_widget(api_result, category_description, exception_message):
+    print(api_result.content.decode())
+    print(exception_message)
+    widget_value: dict = {
+        'api_status': 'Exception',
+        'category_color': 'darkred',
+        'category_description': category_description,
+        'category_subtext': 'API Error',
+        'category_name': 'API Error'
+    }
+    return widget_value
+
+
+def build_valid_widget(api_result, widget_api_result_transformations, widget_api_index):
+    # var assignments
+    cat_rec_xf: str = widget_api_result_transformations[widget_api_index]["cat_rec"]
+    cat_subtext_xf: str = widget_api_result_transformations[widget_api_index]["cat_subtext"]
+    color_xf: str = widget_api_result_transformations[widget_api_index]["color_translate"]
+    descr_xf: str = widget_api_result_transformations[widget_api_index]["descr_translate"]
+
+    # perform transformations using evaluations
+    widget_api_result: json = json.loads(api_result.content)
+    category_name: json = do_transform_logic(
+        widget_api_result,
+        cat_rec_xf
+    )
+    category_subtext: json = do_transform_logic(
+        widget_api_result,
+        cat_subtext_xf
+    )
+
+    # perform transformations using matrices
+    category_color: str = color_xf[category_name]
+    category_description: str = descr_xf[category_name]
+
+    # we have our 5 values for each widget
+    widget_value: dict = {
+        'api_status': widget_api_result,
+        'category_color': category_color,
+        'category_description': category_description,
+        'category_subtext': category_subtext,
+        'category_name': category_name
+    }
+    return widget_value
+
+
 def get_widget_values(widget_api_calls, widget_api_result_transformations) -> (list[dict], json):
     widget_values: list[dict] = []
-    widgets_result_status = 'Error...'
+    overall_dashboard_health = 'No valid widgets processed'
 
     for widget_api_index, widget_api_call in enumerate(widget_api_calls):
         # extract
         api_result: json = requests.get(widget_api_call)
         if api_result.status_code != 200:
-            print(f"Received a {api_result.status_code} instead of successful result")
-            print(api_result.content.decode())
-            widget_value: dict = {
-                'api_status': 'Exception',
-                'category_color': 'darkred',
-                'category_description': f'status of {api_result.status_code} and content of {api_result.content}',
-                'category_subtext': 'API Error',
-                'category_name': 'API Error'
-            }
-            widget_values.append(widget_value)
+            widget_values.append(
+                create_exception_widget(
+                    api_result,
+                    f'status of {api_result.status_code} and content of {api_result.content}',
+                    f"Received a {api_result.status_code} instead of successful result"
+                )
+            )
             continue
         if api_result.text == '[]':
-            print(f"Received an empty list instead of successful result")
-            print(api_result.content.decode())
-            widget_value: dict = {
-                'api_status': 'Exception',
-                'category_color': 'darkred',
-                'category_description': f'text of response is {api_result.text} despite 200 status code',
-                'category_subtext': 'Exception',
-                'category_name': 'Exception'
-            }
-            widget_values.append(widget_value)
+            widget_values.append(
+                create_exception_widget(
+                    api_result,
+                    f'text of response is {api_result.text} despite 200 status code',
+                    f"Received an empty list instead of successful result"
+                )
+            )
             continue
 
-        # var assignments
-        cat_rec_xf: str = widget_api_result_transformations[widget_api_index]["cat_rec"]
-        cat_subtext_xf: str = widget_api_result_transformations[widget_api_index]["cat_subtext"]
-        color_xf: str = widget_api_result_transformations[widget_api_index]["color_translate"]
-        descr_xf: str = widget_api_result_transformations[widget_api_index]["descr_translate"]
-
-        # perform transformations using evaluations
-        widget_api_result: json = json.loads(api_result.content)
-        category_name: json = do_transform_logic(
-            widget_api_result,
-            cat_rec_xf
-        )
-        category_subtext: json = do_transform_logic(
-            widget_api_result,
-            cat_subtext_xf
-        )
-
-        # perform transformations using matrices
-        category_color: str = color_xf[category_name]
-        category_description: str = descr_xf[category_name]
-
-        # we have our 5 values for each widget
-        widget_value: dict = {
-            'api_status': widget_api_result,
-            'category_color': category_color,
-            'category_description': category_description,
-            'category_subtext': category_subtext,
-            'category_name': category_name
-        }
+        widget_value = build_valid_widget(api_result, widget_api_result_transformations, widget_api_index)
         widget_values.append(widget_value)
-        widgets_result_status = 'At least one widget was okay'
+        overall_dashboard_health = 'At least one widget was okay'
 
-    return widget_values, widgets_result_status
+    return widget_values, overall_dashboard_health
 
 
 def render_home_page(request):

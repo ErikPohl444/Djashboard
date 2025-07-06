@@ -12,8 +12,8 @@
                 zipcode
             {% endif %}
             {% if overall_dashboard_health %}
-                {% if overall_dashboard_health == "Error..." %}
-                    There was an error, please try again...
+                {% if overall_dashboard_health == "No valid widgets processed" %}
+                    The dashboard contains no valid widgets
                 {% else %}
                     {% for widget in widgets %}
                         <div class="jumbotron-fluid {{ widget.category_color }}">
