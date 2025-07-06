@@ -3,14 +3,16 @@ import json
 import requests
 
 
-def do_transform_logic(result_json: json, transform_logic: str) -> json:
-    fun = lambda jresult: eval(transform_logic)
+def apply_transformation_logic(widget_api_result: json, transformation_logic: str) -> json:
+    """ Apply transformation logic to the api result body composing a widget"""
+
+    dynamic_function = lambda jresult: eval(transformation_logic)
     try:
-        result = fun(result_json)
+        transformed_result = dynamic_function(widget_api_result)
     except IndexError as e:
-        print(f"IndexError: error with transform logic {transform_logic} resulting in {e}")
+        print(f"IndexError: error with transform logic {transformation_logic} resulting in {e}")
         raise
-    return result
+    return transformed_result
 
 
 def get_api_metadata(env_file_name: str) -> (list[str], list[json]):
@@ -33,7 +35,9 @@ def get_api_metadata(env_file_name: str) -> (list[str], list[json]):
     return api_calls, api_transformations
 
 
-def create_exception_widget(api_result: json, category_description: str, exception_message: str) -> dict:
+def build_exception_widget(api_result: json, category_description: str, exception_message: str) -> dict:
+    """ Build widget values for an exception widget when a widget did not load as expected """
+
     print(api_result.content.decode())
     print(exception_message)
     widget_value: dict = {
@@ -47,6 +51,8 @@ def create_exception_widget(api_result: json, category_description: str, excepti
 
 
 def build_valid_widget(api_result: json, widget_api_result_transformations: dict, widget_api_index: int) -> dict:
+    """ Build widget values for a valid widget when a widget did loaded as expected """
+
     # var assignments
     cat_rec_xf: str = widget_api_result_transformations[widget_api_index]["cat_rec"]
     cat_subtext_xf: str = widget_api_result_transformations[widget_api_index]["cat_subtext"]
@@ -55,11 +61,11 @@ def build_valid_widget(api_result: json, widget_api_result_transformations: dict
 
     # perform transformations using evaluations
     widget_api_result: json = json.loads(api_result.content)
-    category_name: json = do_transform_logic(
+    category_name: json = apply_transformation_logic(
         widget_api_result,
         cat_rec_xf
     )
-    category_subtext: json = do_transform_logic(
+    category_subtext: json = apply_transformation_logic(
         widget_api_result,
         cat_subtext_xf
     )
@@ -79,7 +85,9 @@ def build_valid_widget(api_result: json, widget_api_result_transformations: dict
     return widget_value
 
 
-def get_widget_values(widget_api_calls, widget_api_result_transformations) -> (list[dict], json):
+def build_widgets(widget_api_calls, widget_api_result_transformations) -> (list[dict], json):
+    """ Build widget values for all widgets on a djashboard """
+
     widget_values: list[dict] = []
     overall_dashboard_health = 'No valid widgets processed'
 
@@ -88,7 +96,7 @@ def get_widget_values(widget_api_calls, widget_api_result_transformations) -> (l
         api_result: json = requests.get(widget_api_call)
         if api_result.status_code != 200:
             widget_values.append(
-                create_exception_widget(
+                build_exception_widget(
                     api_result,
                     f'status of {api_result.status_code} and content of {api_result.content}',
                     f"Received a {api_result.status_code} instead of successful result"
@@ -97,7 +105,7 @@ def get_widget_values(widget_api_calls, widget_api_result_transformations) -> (l
             continue
         if api_result.text == '[]':
             widget_values.append(
-                create_exception_widget(
+                build_exception_widget(
                     api_result,
                     f'text of response is {api_result.text} despite 200 status code',
                     f"Received an empty list instead of successful result"
@@ -113,6 +121,8 @@ def get_widget_values(widget_api_calls, widget_api_result_transformations) -> (l
 
 
 def render_home_page(request):
+    """ This is the main facade process for building all widgets on the home page """
+
     # get config data
     # see env_template.json for a template of a functioning env.json file
     api_calls, api_transformations = get_api_metadata("env2.json")
@@ -124,7 +134,7 @@ def render_home_page(request):
         zipcode = None
 
     # extract and transform
-    dashboard_widget_values, widget_api_result = get_widget_values(api_calls, api_transformations)
+    dashboard_widget_values, widget_api_result = build_widgets(api_calls, api_transformations)
 
     # display
     return render(
