@@ -49,6 +49,12 @@ Follow these instructions to set up and run the project on your local machine.
    ```bash
    pip install -r requirements.txt
    ```
+   
+## Configuring an environment_file
+
+An environment file is mandatory and controls the output of the Djashboard.
+
+See these instructions to create one for your usage.  [Environment File Creation Instructions](./docs/environment_template_instructions.md)
 
 ### Running the Project
 
