@@ -13,7 +13,7 @@ def do_transform_logic(result_json: json, transform_logic: str) -> json:
     return result
 
 
-def get_api_metadata(env_file_name) -> (list[str], list[json]):
+def get_api_metadata(env_file_name: str) -> (list[str], list[json]):
     """ Open a widget configuration file and load all widgets into two lists"""
 
     api_calls: list[str] = []
@@ -33,7 +33,7 @@ def get_api_metadata(env_file_name) -> (list[str], list[json]):
     return api_calls, api_transformations
 
 
-def create_exception_widget(api_result, category_description, exception_message):
+def create_exception_widget(api_result: json, category_description: str, exception_message: str) -> dict:
     print(api_result.content.decode())
     print(exception_message)
     widget_value: dict = {
@@ -46,7 +46,7 @@ def create_exception_widget(api_result, category_description, exception_message)
     return widget_value
 
 
-def build_valid_widget(api_result, widget_api_result_transformations, widget_api_index):
+def build_valid_widget(api_result: json, widget_api_result_transformations: dict, widget_api_index: int) -> dict:
     # var assignments
     cat_rec_xf: str = widget_api_result_transformations[widget_api_index]["cat_rec"]
     cat_subtext_xf: str = widget_api_result_transformations[widget_api_index]["cat_subtext"]
