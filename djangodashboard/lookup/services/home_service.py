@@ -118,7 +118,7 @@ def render_home_page(request):
     return render(
         request, 'home.html',
         {
-            'api_status': widget_api_result,
-            'dashboard_vals': dashboard_widget_values
+            'overall_dashboard_health': widget_api_result,
+            'widgets': dashboard_widget_values
         }
     )
