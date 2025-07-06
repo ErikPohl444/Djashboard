@@ -1,7 +1,7 @@
 {
   "api_data": [
     {
-      "api_call": "https://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&api_key={0}&zipCode={1}",
+      "api_call": "https://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&api_key={api_key}&zipCode={initial_zip}",
       "args": {
         "api_key": "[your api key]",
         "initial_zip": "02474"

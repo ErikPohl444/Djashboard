@@ -59,8 +59,8 @@ def home(request) -> HttpResponse:
         # var assignments
         cat_rec_xf: str = api_transformations[api_no]["cat_rec"]
         cat_subtext_xf: str = api_transformations[api_no]["cat_subtext"]
-        color_xf: str = api_transformations[api_no]["color"]
-        descr_xf: str = api_transformations[api_no]["descr"]
+        color_xf: str = api_transformations[api_no]["color_translate"]
+        descr_xf: str = api_transformations[api_no]["descr_translate"]
 
         # perform transformations using evaluations
         api_result_json: json = json.loads(api_result.content)
