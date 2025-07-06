@@ -33,40 +33,52 @@ def get_api_metadata(env_file_name) -> (list[str], list[json]):
     return api_calls, api_transformations
 
 
-def get_dashboard_vals(api_calls, api_transformations) -> (list[dict], json):
-    dashboard_vals: list[dict] = []
+def get_widget_values(widget_api_calls, widget_api_result_transformations) -> (list[dict], json):
+    widget_values: list[dict] = []
+    widgets_result_status = 'Error...'
 
-    for api_no, api_call in enumerate(api_calls):
+    for widget_api_index, widget_api_call in enumerate(widget_api_calls):
         # extract
-        api_result: json = requests.get(api_call)
-        if api_result.status_code != 200 or (api_result.text == '[]'):
+        api_result: json = requests.get(widget_api_call)
+        if api_result.status_code != 200:
             print(f"Received a {api_result.status_code} instead of successful result")
             print(api_result.content.decode())
-            dashboard_val: dict = {
+            widget_value: dict = {
                 'api_status': 'Exception',
                 'category_color': 'darkred',
-                'category_description': api_result.content,
+                'category_description': f'status of {api_result.status_code} and content of {api_result.content}',
                 'category_subtext': 'API Error',
                 'category_name': 'API Error'
             }
-            dashboard_vals.append(dashboard_val)
-            api_result_json = 'Exception'
+            widget_values.append(widget_value)
+            continue
+        if api_result.text == '[]':
+            print(f"Received an empty list instead of successful result")
+            print(api_result.content.decode())
+            widget_value: dict = {
+                'api_status': 'Exception',
+                'category_color': 'darkred',
+                'category_description': f'text of response is {api_result.text} despite 200 status code',
+                'category_subtext': 'Exception',
+                'category_name': 'Exception'
+            }
+            widget_values.append(widget_value)
             continue
 
         # var assignments
-        cat_rec_xf: str = api_transformations[api_no]["cat_rec"]
-        cat_subtext_xf: str = api_transformations[api_no]["cat_subtext"]
-        color_xf: str = api_transformations[api_no]["color_translate"]
-        descr_xf: str = api_transformations[api_no]["descr_translate"]
+        cat_rec_xf: str = widget_api_result_transformations[widget_api_index]["cat_rec"]
+        cat_subtext_xf: str = widget_api_result_transformations[widget_api_index]["cat_subtext"]
+        color_xf: str = widget_api_result_transformations[widget_api_index]["color_translate"]
+        descr_xf: str = widget_api_result_transformations[widget_api_index]["descr_translate"]
 
         # perform transformations using evaluations
-        api_result_json: json = json.loads(api_result.content)
+        widget_api_result: json = json.loads(api_result.content)
         category_name: json = do_transform_logic(
-            api_result_json,
+            widget_api_result,
             cat_rec_xf
         )
         category_subtext: json = do_transform_logic(
-            api_result_json,
+            widget_api_result,
             cat_subtext_xf
         )
 
@@ -75,15 +87,17 @@ def get_dashboard_vals(api_calls, api_transformations) -> (list[dict], json):
         category_description: str = descr_xf[category_name]
 
         # we have our 5 values for each widget
-        dashboard_val: dict = {
-            'api_status': api_result_json,
+        widget_value: dict = {
+            'api_status': widget_api_result,
             'category_color': category_color,
             'category_description': category_description,
             'category_subtext': category_subtext,
             'category_name': category_name
         }
-        dashboard_vals.append(dashboard_val)
-    return dashboard_vals, api_result_json
+        widget_values.append(widget_value)
+        widgets_result_status = 'At least one widget was okay'
+
+    return widget_values, widgets_result_status
 
 
 def render_home_page(request):
@@ -98,13 +112,13 @@ def render_home_page(request):
         zipcode = None
 
     # extract and transform
-    dashboard_vals, api_result_json = get_dashboard_vals(api_calls, api_transformations)
+    dashboard_widget_values, widget_api_result = get_widget_values(api_calls, api_transformations)
 
     # display
     return render(
         request, 'home.html',
         {
-            'api_status': api_result_json,
-            'dashboard_vals': dashboard_vals
+            'api_status': widget_api_result,
+            'dashboard_vals': dashboard_widget_values
         }
     )
