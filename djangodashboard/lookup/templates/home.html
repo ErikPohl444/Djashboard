@@ -11,17 +11,17 @@
             {% if zipcode %}
                 zipcode
             {% endif %}
-            {% if api_status %}
-                {% if api_status == "Error..." %}
+            {% if overall_dashboard_health %}
+                {% if overall_dashboard_health == "Error..." %}
                     There was an error, please try again...
                 {% else %}
-                    {% for item in dashboard_vals %}
-                        <div class="jumbotron-fluid {{ item.category_color }}">
-                            <h1 class="display-4">{{ item.category_name }}</h1>
-                            <p class="lead">{{ item.category_subtext }}</p>
+                    {% for widget in widgets %}
+                        <div class="jumbotron-fluid {{ widget.category_color }}">
+                            <h1 class="display-4">{{ widget.category_name }}</h1>
+                            <p class="lead">{{ widget.category_subtext }}</p>
                             <hr class="my-4">
                             <p class="lead"></p>
-                            <p>{{ item.category_description }}</p>
+                            <p>{{ widget.category_description }}</p>
                         </div>
                     {% endfor %}
                 {% endif %}
