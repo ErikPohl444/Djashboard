@@ -56,6 +56,9 @@ An environment file is mandatory and controls the output of the Djashboard.
 
 See these instructions to create one for your usage.  [Environment File Creation Instructions](./docs/environment_template_instructions.md)
 
+Here's additional context:
+[Djashboard Concept](./docs/concept.md)
+
 ### Running the Project
 
 1. Start the Django development server:
