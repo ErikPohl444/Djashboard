@@ -30,4 +30,4 @@ For each widget configuration in your config file, a jumbotron widget will be di
 
 **See a sample config file**
 
- [Sample config file instructions](./docs/environment_template_instructions.md)
+ [Sample config file instructions](./environment_template_instructions.md)
